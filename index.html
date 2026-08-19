@@ -12,6 +12,8 @@
       --card-bg: #ffffff;
       --text: #1e293b;
       --border: #cbd5e1;
+      --danger: #ef4444;
+      --danger-hover: #dc2626;
     }
 
     * { box-sizing: border-box; font-family: system-ui, -apple-system, sans-serif; margin: 0; padding: 0; }
@@ -69,15 +71,22 @@
       transition: background 0.2s;
     }
     .btn:hover { background: var(--primary-hover); }
-    .btn-secondary { background: #059669; margin-top: 0.5rem; }
+    
+    .btn-secondary { background: #059669; }
     .btn-secondary:hover { background: #047857; }
+    
+    .btn-danger { background: var(--danger); }
+    .btn-danger:hover { background: var(--danger-hover); }
+
+    .action-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-top: 1rem; }
 
     .table-container { overflow-x: auto; max-height: 250px; }
     table { width: 100%; border-collapse: collapse; font-size: 0.85rem; text-align: left; }
     th, td { padding: 0.5rem; border-bottom: 1px solid var(--border); }
     th { background: #f8fafc; position: sticky; top: 0; }
-
-    optgroup { font-weight: bold; font-style: normal; color: var(--primary); }
+    
+    .badge-pagado { background: #d1fae5; color: #065f46; padding: 0.2rem 0.5rem; border-radius: 12px; font-size: 0.75rem; font-weight: bold;}
+    .badge-pendiente { background: #fef3c7; color: #92400e; padding: 0.2rem 0.5rem; border-radius: 12px; font-size: 0.75rem; font-weight: bold;}
   </style>
 </head>
 <body>
@@ -110,7 +119,6 @@
           <select id="product" required>
             <option value="" disabled selected>Selecciona un producto</option>
             
-            <!-- Galletas y Panadería Básica -->
             <optgroup label="Galletas y Panadería Básica">
               <option value="Galletas de Almendra (5 pz)" data-sat="50181905" data-iva="0" data-ieps="8" data-price="35">Galletas de Almendra (5 pz) - $35</option>
               <option value="Pan de Elote (Rebanada)" data-sat="50181900" data-iva="0" data-ieps="0" data-price="20">Pan de Elote (Rebanada) - $20</option>
@@ -119,7 +127,6 @@
               <option value="Pan de Zanahoria (Completo)" data-sat="50181901" data-iva="0" data-ieps="8" data-price="170">Pan de Zanahoria (Completo) - $170</option>
             </optgroup>
             
-            <!-- Postres y Flanes -->
             <optgroup label="Postres y Flanes">
               <option value="Flan de Cajeta (Rebanada)" data-sat="50192303" data-iva="0" data-ieps="8" data-price="35">Flan de Cajeta (Rebanada) - $35</option>
               <option value="Flan de Cajeta (Completo)" data-sat="50192303" data-iva="0" data-ieps="8" data-price="250">Flan de Cajeta (Completo) - $250</option>
@@ -127,7 +134,6 @@
               <option value="Pay de Queso Fresa (Completo)" data-sat="50181901" data-iva="0" data-ieps="8" data-price="250">Pay de Queso Fresa (Completo) - $250</option>
             </optgroup>
             
-            <!-- Alimentos Preparados / Desayunos -->
             <optgroup label="Alimentos Preparados / Desayunos">
               <option value="Hot Cakes Tradicionales (3 pz)" data-sat="50192701" data-iva="0" data-ieps="0" data-price="50">Hot Cakes Tradicionales (3 pz) - $50</option>
               <option value="Hot Cakes con Plátano (3 pz)" data-sat="50192701" data-iva="0" data-ieps="0" data-price="60">Hot Cakes con Plátano (3 pz) - $60</option>
@@ -150,9 +156,19 @@
 
       <div class="grid-2">
         <div class="form-group">
-          <label for="totalAmount">Total Cobrado ($ MXN)</label>
+          <label for="totalAmount">Total Cobrado / Anticipo ($)</label>
           <input type="number" id="totalAmount" step="0.01" min="0" required placeholder="0.00">
         </div>
+        <div class="form-group">
+          <label for="paymentStatus">Estatus de Pago</label>
+          <select id="paymentStatus" required>
+            <option value="Pagado">✅ Pagado</option>
+            <option value="Pendiente">⏳ Pago Pendiente</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="grid-2">
         <div class="form-group">
           <label for="paymentMethod">Método de Cobro</label>
           <select id="paymentMethod" required>
@@ -161,6 +177,19 @@
             <option value="Tarjeta">Tarjeta / Terminal</option>
           </select>
         </div>
+        <div class="form-group">
+          <label for="invoiceType">Destino Fiscal</label>
+          <select id="invoiceType" required>
+            <option value="Factura Global Mes">Factura Global del Mes</option>
+            <option value="Factura Individual">Factura Individual</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Nuevo campo de notas -->
+      <div class="form-group">
+        <label for="notes">Notas / Detalles del Pedido (Opcional)</label>
+        <input type="text" id="notes" placeholder="Ej. Entregar a las 5pm, sin nueces, etc.">
       </div>
 
       <!-- Desglose Fiscal Automático -->
@@ -170,21 +199,13 @@
         <div>IEPS: <span id="lblIEPS">$0.00</span></div>
       </div>
 
-      <div class="form-group">
-        <label for="invoiceType">Destino Fiscal</label>
-        <select id="invoiceType" required>
-          <option value="Factura Global Mes">Factura Global del Mes</option>
-          <option value="Factura Individual">Factura Individual</option>
-        </select>
-      </div>
-
       <button type="submit" class="btn">Guardar Venta</button>
     </form>
   </div>
 
   <!-- Resumen y Exportación -->
   <div class="card">
-    <h2>📋 Ventas Registradas</h2>
+    <h2>📋 Ventas Registradas (Local)</h2>
     <div class="table-container">
       <table id="salesTable">
         <thead>
@@ -193,18 +214,21 @@
             <th>Cliente</th>
             <th>Producto</th>
             <th>Total</th>
-            <th>Método</th>
+            <th>Estatus</th>
           </tr>
         </thead>
         <tbody></tbody>
       </table>
     </div>
-    <button id="btnExport" class="btn btn-secondary">📥 Exportar a CSV (Excel / Sheets)</button>
+    
+    <div class="action-buttons">
+      <button id="btnExport" class="btn btn-secondary">📥 Exportar a CSV</button>
+      <button id="btnClear" class="btn btn-danger">🗑️ Limpiar Pantalla</button>
+    </div>
   </div>
 </div>
 
 <script>
-  // Inicialización de fecha
   document.getElementById('saleDate').value = new Date().toISOString().split('T')[0];
 
   let salesData = JSON.parse(localStorage.getItem('ventas_postreria')) || [];
@@ -214,7 +238,6 @@
   const totalInput = document.getElementById('totalAmount');
   const saleForm = document.getElementById('saleForm');
 
-  // Actualizar cálculo al seleccionar producto o cantidad
   productSelect.addEventListener('change', autoFillPrice);
   quantityInput.addEventListener('input', autoFillPrice);
   totalInput.addEventListener('input', calculateTaxes);
@@ -227,7 +250,7 @@
     if (defaultPrice > 0) {
       totalInput.value = (defaultPrice * qty).toFixed(2);
     } else {
-      totalInput.value = ''; // Limpia el total si es un pedido especial
+      totalInput.value = ''; 
     }
     calculateTaxes();
   }
@@ -243,7 +266,6 @@
     const total = parseFloat(totalInput.value) || 0;
     const { ivaRate, iepsRate } = getTaxRates();
 
-    // Fórmula desglosadora: Base = Total / (1 + %IVA + %IEPS)
     const subtotal = total / (1 + ivaRate + iepsRate);
     const iva = subtotal * ivaRate;
     const ieps = subtotal * iepsRate;
@@ -255,10 +277,8 @@
     return { subtotal, iva, ieps };
   }
 
-  // URL del Web App de Google Apps Script
   const sheetURL = "https://script.google.com/macros/s/AKfycbzUITMtQ2Faz6jiJ-IjnR-wG2rGYKsldx9AIR1r16dyw-2p54SXU4WD2U-Rw-2ZPcO7eA/exec";
 
-  // Guardar Venta (Nube y Local)
   saleForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const { subtotal, iva, ieps } = calculateTaxes();
@@ -268,8 +288,8 @@
     const sale = {
       id: folioVenta,
       date: document.getElementById('saleDate').value,
-      customer: document.getElementById('customer').value, // <-- El cliente se incluyó aquí
-      product: selectedOption.value, // Toma el nombre limpio de la opción
+      customer: document.getElementById('customer').value,
+      product: selectedOption.value,
       satCode: selectedOption.dataset.sat,
       quantity: parseInt(quantityInput.value),
       total: parseFloat(totalInput.value),
@@ -277,14 +297,15 @@
       iva: parseFloat(iva.toFixed(2)),
       ieps: parseFloat(ieps.toFixed(2)),
       paymentMethod: document.getElementById('paymentMethod').value,
-      invoiceType: document.getElementById('invoiceType').value
+      invoiceType: document.getElementById('invoiceType').value,
+      status: document.getElementById('paymentStatus').value, // NUEVO
+      notes: document.getElementById('notes').value // NUEVO
     };
 
     const btn = e.target.querySelector('button');
     btn.textContent = "⏳ Guardando en la nube...";
 
     try {
-      // Envío a Google Sheets
       await fetch(sheetURL, {
         method: 'POST',
         mode: 'no-cors', 
@@ -294,11 +315,9 @@
 
       alert("✅ ¡Venta guardada exitosamente en la nube!");
       
-      // Se guarda de forma local para actualizar la tabla del navegador
       salesData.push(sale);
       localStorage.setItem('ventas_postreria', JSON.stringify(salesData));
 
-      // Reseteo del formulario
       saleForm.reset();
       document.getElementById('saleDate').value = new Date().toISOString().split('T')[0];
       document.getElementById('customer').value = "Público en General";
@@ -306,36 +325,45 @@
       renderTable();
       
     } catch (error) {
-      alert("❌ Hubo un error al guardar en la nube. Revisa tu conexión a internet.");
+      alert("❌ Hubo un error al guardar en la nube. Revisa tu conexión.");
       console.error(error);
     }
     btn.textContent = "Guardar Venta";
   });
 
-  // Renderizar tabla
   function renderTable() {
     const tbody = document.querySelector('#salesTable tbody');
     tbody.innerHTML = '';
     salesData.slice().reverse().forEach(item => {
+      const statusClass = item.status === 'Pagado' ? 'badge-pagado' : 'badge-pendiente';
       const tr = document.createElement('tr');
       tr.innerHTML = `
         <td>${item.date}</td>
         <td>${item.customer}</td>
         <td>${item.product} (${item.quantity})</td>
         <td>$${item.total.toFixed(2)}</td>
-        <td>${item.paymentMethod}</td>
+        <td><span class="${statusClass}">${item.status}</span></td>
       `;
       tbody.appendChild(tr);
     });
   }
 
-  // Exportar a CSV (Backup local)
+  // BOTÓN LIMPIAR PANTALLA (NUEVO)
+  document.getElementById('btnClear').addEventListener('click', () => {
+    const confirmar = confirm("⚠️ ¿Estás seguro que deseas limpiar el historial de la pantalla? (Tranquilo, esto NO borra los datos de tu Google Sheets).");
+    if (confirmar) {
+      salesData = [];
+      localStorage.removeItem('ventas_postreria');
+      renderTable();
+    }
+  });
+
   document.getElementById('btnExport').addEventListener('click', () => {
     if (salesData.length === 0) return alert('No hay ventas registradas.');
     
-    let csv = 'Folio,Fecha,Cliente,Producto,Clave SAT,Cantidad,Total,Subtotal (Base),IVA,IEPS,Metodo Pago,Tipo Factura\n';
+    let csv = 'Folio,Fecha,Cliente,Producto,Clave SAT,Cantidad,Total,Subtotal,IVA,IEPS,Metodo Pago,Tipo Factura,Estatus,Notas\n';
     salesData.forEach(row => {
-      csv += `${row.id},${row.date},"${row.customer}","${row.product}",${row.satCode},${row.quantity},${row.total},${row.subtotal},${row.iva},${row.ieps},"${row.paymentMethod}","${row.invoiceType}"\n`;
+      csv += `${row.id},${row.date},"${row.customer}","${row.product}",${row.satCode},${row.quantity},${row.total},${row.subtotal},${row.iva},${row.ieps},"${row.paymentMethod}","${row.invoiceType}","${row.status}","${row.notes}"\n`;
     });
 
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
