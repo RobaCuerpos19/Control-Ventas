@@ -45,6 +45,42 @@
 
     .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
 
+    /* Estilos del carrito */
+    .product-entry-box {
+      background: #f1f5f9;
+      border: 1px solid var(--border);
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 1.5rem;
+    }
+    .cart-box {
+      background: #ffffff;
+      border: 2px dashed var(--primary);
+      border-radius: 8px;
+      padding: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #f1f5f9;
+      font-size: 0.9rem;
+    }
+    .cart-item:last-child { border-bottom: none; }
+    .btn-remove {
+      background: #fee2e2;
+      color: #ef4444;
+      border: none;
+      border-radius: 6px;
+      padding: 0.2rem 0.5rem;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.2s;
+    }
+    .btn-remove:hover { background: #fca5a5; }
+
     .tax-preview {
       background: #f1f5f9;
       border-radius: 8px;
@@ -87,6 +123,8 @@
     
     .badge-pagado { background: #d1fae5; color: #065f46; padding: 0.2rem 0.5rem; border-radius: 12px; font-size: 0.75rem; font-weight: bold;}
     .badge-pendiente { background: #fef3c7; color: #92400e; padding: 0.2rem 0.5rem; border-radius: 12px; font-size: 0.75rem; font-weight: bold;}
+    
+    optgroup { font-weight: bold; font-style: normal; color: var(--primary); }
   </style>
 </head>
 <body>
@@ -94,11 +132,11 @@
 <div class="container">
   <h1>Control de Ventas & Facturación</h1>
 
-  <!-- Formulario de Registro -->
   <div class="card">
-    <h2>➕ Nueva Venta</h2>
+    <h2>➕ Nueva Venta Multi-Producto</h2>
     <form id="saleForm">
       
+      <!-- Datos Generales -->
       <div class="grid-2">
         <div class="form-group">
           <label for="saleDate">Fecha</label>
@@ -113,51 +151,67 @@
         </div>
       </div>
 
-      <div class="grid-2">
-        <div class="form-group">
-          <label for="product">Producto</label>
-          <select id="product" required>
-            <option value="" disabled selected>Selecciona un producto</option>
-            
-            <optgroup label="Galletas y Panadería Básica">
-              <option value="Galletas de Almendra (5 pz)" data-sat="50181905" data-iva="0" data-ieps="8" data-price="35">Galletas de Almendra (5 pz) - $35</option>
-              <option value="Pan de Elote (Rebanada)" data-sat="50181900" data-iva="0" data-ieps="0" data-price="20">Pan de Elote (Rebanada) - $20</option>
-              <option value="Pan de Elote (Completo)" data-sat="50181900" data-iva="0" data-ieps="0" data-price="120">Pan de Elote (Completo) - $120</option>
-              <option value="Pan de Zanahoria (Rebanada)" data-sat="50181901" data-iva="0" data-ieps="8" data-price="30">Pan de Zanahoria (Rebanada) - $30</option>
-              <option value="Pan de Zanahoria (Completo)" data-sat="50181901" data-iva="0" data-ieps="8" data-price="170">Pan de Zanahoria (Completo) - $170</option>
-            </optgroup>
-            
-            <optgroup label="Postres y Flanes">
-              <option value="Flan de Cajeta (Rebanada)" data-sat="50192303" data-iva="0" data-ieps="8" data-price="35">Flan de Cajeta (Rebanada) - $35</option>
-              <option value="Flan de Cajeta (Completo)" data-sat="50192303" data-iva="0" data-ieps="8" data-price="250">Flan de Cajeta (Completo) - $250</option>
-              <option value="Pay de Queso Fresa (Rebanada)" data-sat="50181901" data-iva="0" data-ieps="8" data-price="35">Pay de Queso Fresa (Rebanada) - $35</option>
-              <option value="Pay de Queso Fresa (Completo)" data-sat="50181901" data-iva="0" data-ieps="8" data-price="250">Pay de Queso Fresa (Completo) - $250</option>
-            </optgroup>
-            
-            <optgroup label="Alimentos Preparados / Desayunos">
-              <option value="Hot Cakes Tradicionales (3 pz)" data-sat="50192701" data-iva="0" data-ieps="0" data-price="50">Hot Cakes Tradicionales (3 pz) - $50</option>
-              <option value="Hot Cakes con Plátano (3 pz)" data-sat="50192701" data-iva="0" data-ieps="0" data-price="60">Hot Cakes con Plátano (3 pz) - $60</option>
-              <option value="Empanadas de Queso (3 pz)" data-sat="50192701" data-iva="0" data-ieps="0" data-price="50">Empanadas de Queso (3 pz) - $50</option>
-              <option value="Empanadas Pollo / Carne (3 pz)" data-sat="50192701" data-iva="0" data-ieps="0" data-price="50">Empanadas Pollo / Carne (3 pz) - $50</option>
-              <option value="Plátano Frito con Lechera" data-sat="50192701" data-iva="0" data-ieps="8" data-price="50">Plátano Frito con Lechera - $50</option>
-              <option value="Plátano Frito Queso y Crema" data-sat="50192701" data-iva="0" data-ieps="0" data-price="60">Plátano Frito Queso y Crema - $60</option>
-            </optgroup>
-
-            <optgroup label="Otros">
-              <option value="Pedido Especial / Otro" data-sat="50192301" data-iva="16" data-ieps="8" data-price="0">Pedido Especial (Ingresar Precio Manual)</option>
-            </optgroup>
-          </select>
+      <!-- Área para agregar productos al carrito -->
+      <div class="product-entry-box">
+        <h3 style="font-size: 1rem; margin-bottom: 0.75rem;">🛒 Agregar Productos a la Cuenta</h3>
+        <div class="grid-2">
+          <div class="form-group">
+            <label for="product">Producto</label>
+            <select id="product">
+              <option value="" disabled selected>Selecciona un producto</option>
+              <optgroup label="Galletas y Panadería Básica">
+                <option value="Galletas de Almendra (5 pz)" data-sat="50181905" data-iva="0" data-ieps="8" data-price="35">Galletas de Almendra (5 pz) - $35</option>
+                <option value="Pan de Elote (Rebanada)" data-sat="50181900" data-iva="0" data-ieps="0" data-price="20">Pan de Elote (Rebanada) - $20</option>
+                <option value="Pan de Elote (Completo)" data-sat="50181900" data-iva="0" data-ieps="0" data-price="120">Pan de Elote (Completo) - $120</option>
+                <option value="Pan de Zanahoria (Rebanada)" data-sat="50181901" data-iva="0" data-ieps="8" data-price="30">Pan de Zanahoria (Rebanada) - $30</option>
+                <option value="Pan de Zanahoria (Completo)" data-sat="50181901" data-iva="0" data-ieps="8" data-price="170">Pan de Zanahoria (Completo) - $170</option>
+              </optgroup>
+              <optgroup label="Postres y Flanes">
+                <option value="Flan de Cajeta (Rebanada)" data-sat="50192303" data-iva="0" data-ieps="8" data-price="35">Flan de Cajeta (Rebanada) - $35</option>
+                <option value="Flan de Cajeta (Completo)" data-sat="50192303" data-iva="0" data-ieps="8" data-price="250">Flan de Cajeta (Completo) - $250</option>
+                <option value="Pay de Queso Fresa (Rebanada)" data-sat="50181901" data-iva="0" data-ieps="8" data-price="35">Pay de Queso Fresa (Rebanada) - $35</option>
+                <option value="Pay de Queso Fresa (Completo)" data-sat="50181901" data-iva="0" data-ieps="8" data-price="250">Pay de Queso Fresa (Completo) - $250</option>
+              </optgroup>
+              <optgroup label="Alimentos Preparados / Desayunos">
+                <option value="Hot Cakes Tradicionales (3 pz)" data-sat="50192701" data-iva="0" data-ieps="0" data-price="50">Hot Cakes Tradicionales (3 pz) - $50</option>
+                <option value="Hot Cakes con Plátano (3 pz)" data-sat="50192701" data-iva="0" data-ieps="0" data-price="60">Hot Cakes con Plátano (3 pz) - $60</option>
+                <option value="Empanadas de Queso (3 pz)" data-sat="50192701" data-iva="0" data-ieps="0" data-price="50">Empanadas de Queso (3 pz) - $50</option>
+                <option value="Empanadas Pollo / Carne (3 pz)" data-sat="50192701" data-iva="0" data-ieps="0" data-price="50">Empanadas Pollo / Carne (3 pz) - $50</option>
+                <option value="Plátano Frito con Lechera" data-sat="50192701" data-iva="0" data-ieps="8" data-price="50">Plátano Frito con Lechera - $50</option>
+                <option value="Plátano Frito Queso y Crema" data-sat="50192701" data-iva="0" data-ieps="0" data-price="60">Plátano Frito Queso y Crema - $60</option>
+              </optgroup>
+              <optgroup label="Otros">
+                <option value="Pedido Especial / Otro" data-sat="50192301" data-iva="16" data-ieps="8" data-price="0">Pedido Especial / Propina (Ingresar Precio)</option>
+              </optgroup>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="quantity">Cantidad</label>
+            <input type="number" id="quantity" min="1" value="1">
+          </div>
         </div>
-        <div class="form-group">
-          <label for="quantity">Cantidad</label>
-          <input type="number" id="quantity" min="1" value="1" required>
+        <div class="grid-2">
+          <div class="form-group">
+            <label for="itemPrice">Precio Unitario ($)</label>
+            <input type="number" id="itemPrice" step="0.01" min="0" placeholder="0.00">
+          </div>
+          <div class="form-group" style="display: flex; align-items: flex-end;">
+            <button type="button" id="btnAddCart" class="btn btn-secondary" style="margin-top:0;">➕ Añadir a la cuenta</button>
+          </div>
         </div>
       </div>
 
+      <!-- Resumen del Carrito -->
+      <div id="cartBox" class="cart-box" style="display: none;">
+        <h4 style="margin-bottom: 0.5rem; font-size: 0.95rem; color: var(--primary);">📋 Cuenta actual:</h4>
+        <div id="cartItems"></div>
+      </div>
+
+      <!-- Totales y Pago -->
       <div class="grid-2">
         <div class="form-group">
-          <label for="totalAmount">Total Cobrado / Anticipo ($)</label>
-          <input type="number" id="totalAmount" step="0.01" min="0" required placeholder="0.00">
+          <label for="totalAmount">Total a Cobrar ($ MXN)</label>
+          <input type="number" id="totalAmount" readonly style="background: #e2e8f0; font-weight: bold; color: #0f172a;" placeholder="0.00">
         </div>
         <div class="form-group">
           <label for="paymentStatus">Estatus de Pago</label>
@@ -186,10 +240,9 @@
         </div>
       </div>
 
-      <!-- Nuevo campo de notas -->
       <div class="form-group">
         <label for="notes">Notas / Detalles del Pedido (Opcional)</label>
-        <input type="text" id="notes" placeholder="Ej. Entregar a las 5pm, sin nueces, etc.">
+        <input type="text" id="notes" placeholder="Ej. Empanadas + Pan de zanahoria (Transferencia $90)">
       </div>
 
       <!-- Desglose Fiscal Automático -->
@@ -199,7 +252,7 @@
         <div>IEPS: <span id="lblIEPS">$0.00</span></div>
       </div>
 
-      <button type="submit" class="btn">Guardar Venta</button>
+      <button type="submit" class="btn">Guardar Venta Completa</button>
     </form>
   </div>
 
@@ -212,7 +265,7 @@
           <tr>
             <th>Fecha</th>
             <th>Cliente</th>
-            <th>Producto</th>
+            <th>Productos</th>
             <th>Total</th>
             <th>Estatus</th>
           </tr>
@@ -230,79 +283,152 @@
 
 <script>
   document.getElementById('saleDate').value = new Date().toISOString().split('T')[0];
-
   let salesData = JSON.parse(localStorage.getItem('ventas_postreria')) || [];
+  let currentCart = []; // Aquí guardaremos los productos múltiples
 
   const productSelect = document.getElementById('product');
   const quantityInput = document.getElementById('quantity');
-  const totalInput = document.getElementById('totalAmount');
+  const itemPriceInput = document.getElementById('itemPrice');
   const saleForm = document.getElementById('saleForm');
+  const cartBox = document.getElementById('cartBox');
+  const cartItems = document.getElementById('cartItems');
 
-  productSelect.addEventListener('change', autoFillPrice);
-  quantityInput.addEventListener('input', autoFillPrice);
-  totalInput.addEventListener('input', calculateTaxes);
-
-  function autoFillPrice() {
-    const selectedOption = productSelect.options[productSelect.selectedIndex];
-    const defaultPrice = parseFloat(selectedOption.dataset.price) || 0;
-    const qty = parseInt(quantityInput.value) || 1;
-    
-    if (defaultPrice > 0) {
-      totalInput.value = (defaultPrice * qty).toFixed(2);
-    } else {
-      totalInput.value = ''; 
+  // Autocompletar precio cuando seleccionas un producto
+  productSelect.addEventListener('change', () => {
+    const option = productSelect.options[productSelect.selectedIndex];
+    if(option && option.value !== "") {
+      const price = parseFloat(option.dataset.price) || 0;
+      itemPriceInput.value = price > 0 ? price : '';
     }
-    calculateTaxes();
+  });
+
+  // Agregar al carrito
+  document.getElementById('btnAddCart').addEventListener('click', () => {
+    if(!productSelect.value) return alert("Selecciona un producto primero.");
+    
+    const qty = parseInt(quantityInput.value) || 1;
+    const price = parseFloat(itemPriceInput.value) || 0;
+    const option = productSelect.options[productSelect.selectedIndex];
+    
+    const ivaRate = (parseFloat(option.dataset.iva) || 0) / 100;
+    const iepsRate = (parseFloat(option.dataset.ieps) || 0) / 100;
+    
+    // Calcular desglose de ese producto en específico
+    const lineTotal = price * qty;
+    const lineSubtotal = lineTotal / (1 + ivaRate + iepsRate);
+    const lineIva = lineSubtotal * ivaRate;
+    const lineIeps = lineSubtotal * iepsRate;
+
+    currentCart.push({
+      name: option.value,
+      sat: option.dataset.sat,
+      qty: qty,
+      price: price,
+      total: lineTotal,
+      subtotal: lineSubtotal,
+      iva: lineIva,
+      ieps: lineIeps
+    });
+
+    // Limpiar inputs
+    productSelect.value = "";
+    quantityInput.value = 1;
+    itemPriceInput.value = "";
+    
+    renderCart();
+  });
+
+  // Dibujar el carrito y calcular Gran Total
+  function renderCart() {
+    cartItems.innerHTML = '';
+    let grandTotal = 0, grandSubtotal = 0, grandIva = 0, grandIeps = 0;
+
+    if(currentCart.length === 0) {
+      cartBox.style.display = 'none';
+      document.getElementById('totalAmount').value = '';
+      document.getElementById('lblSubtotal').textContent = '$0.00';
+      document.getElementById('lblIVA').textContent = '$0.00';
+      document.getElementById('lblIEPS').textContent = '$0.00';
+      return;
+    }
+
+    cartBox.style.display = 'block';
+
+    currentCart.forEach((item, index) => {
+      grandTotal += item.total;
+      grandSubtotal += item.subtotal;
+      grandIva += item.iva;
+      grandIeps += item.ieps;
+
+      const div = document.createElement('div');
+      div.className = 'cart-item';
+      div.innerHTML = `
+        <div><strong>${item.qty}x</strong> ${item.name}</div>
+        <div>
+          <span style="margin-right: 10px;">$${item.total.toFixed(2)}</span>
+          <button type="button" class="btn-remove" onclick="removeCartItem(${index})">X</button>
+        </div>
+      `;
+      cartItems.appendChild(div);
+    });
+
+    document.getElementById('totalAmount').value = grandTotal.toFixed(2);
+    document.getElementById('lblSubtotal').textContent = `$${grandSubtotal.toFixed(2)}`;
+    document.getElementById('lblIVA').textContent = `$${grandIva.toFixed(2)}`;
+    document.getElementById('lblIEPS').textContent = `$${grandIeps.toFixed(2)}`;
   }
 
-  function getTaxRates() {
-    const selectedOption = productSelect.options[productSelect.selectedIndex];
-    const ivaRate = (parseFloat(selectedOption?.dataset.iva) || 0) / 100;
-    const iepsRate = (parseFloat(selectedOption?.dataset.ieps) || 0) / 100;
-    return { ivaRate, iepsRate };
-  }
-
-  function calculateTaxes() {
-    const total = parseFloat(totalInput.value) || 0;
-    const { ivaRate, iepsRate } = getTaxRates();
-
-    const subtotal = total / (1 + ivaRate + iepsRate);
-    const iva = subtotal * ivaRate;
-    const ieps = subtotal * iepsRate;
-
-    document.getElementById('lblSubtotal').textContent = `$${subtotal.toFixed(2)}`;
-    document.getElementById('lblIVA').textContent = `$${iva.toFixed(2)}`;
-    document.getElementById('lblIEPS').textContent = `$${ieps.toFixed(2)}`;
-
-    return { subtotal, iva, ieps };
+  // Eliminar producto del carrito
+  window.removeCartItem = function(index) {
+    currentCart.splice(index, 1);
+    renderCart();
   }
 
   const sheetURL = "https://script.google.com/macros/s/AKfycbzUITMtQ2Faz6jiJ-IjnR-wG2rGYKsldx9AIR1r16dyw-2p54SXU4WD2U-Rw-2ZPcO7eA/exec";
 
+  // Guardar Venta (Combina los productos del carrito)
   saleForm.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const { subtotal, iva, ieps } = calculateTaxes();
-    const selectedOption = productSelect.options[productSelect.selectedIndex];
+    if(currentCart.length === 0) {
+      alert("⚠️ Por favor, añade al menos un producto a la cuenta antes de guardar.");
+      return;
+    }
+
+    // Unir textos para que Google Sheets lo reciba en UNA SOLA fila
+    let grandTotal = 0, grandSubtotal = 0, grandIva = 0, grandIeps = 0, totalQty = 0;
+    const productNames = [];
+    const satCodes = [];
+
+    currentCart.forEach(item => {
+      grandTotal += item.total;
+      grandSubtotal += item.subtotal;
+      grandIva += item.iva;
+      grandIeps += item.ieps;
+      totalQty += item.qty;
+      productNames.push(`${item.qty}x ${item.name}`); // Ej: "1x Empanadas"
+      if (!satCodes.includes(item.sat)) satCodes.push(item.sat);
+    });
+
     const folioVenta = 'VTA-' + Math.floor(1000 + Math.random() * 9000);
 
     const sale = {
       id: folioVenta,
       date: document.getElementById('saleDate').value,
       customer: document.getElementById('customer').value,
-      product: selectedOption.value,
-      satCode: selectedOption.dataset.sat,
-      quantity: parseInt(quantityInput.value),
-      total: parseFloat(totalInput.value),
-      subtotal: parseFloat(subtotal.toFixed(2)),
-      iva: parseFloat(iva.toFixed(2)),
-      ieps: parseFloat(ieps.toFixed(2)),
+      product: productNames.join(" + "), // Ej: "1x Empanadas + 1x Pan de Zanahoria"
+      satCode: satCodes.join(", "),
+      quantity: totalQty,
+      total: parseFloat(grandTotal.toFixed(2)),
+      subtotal: parseFloat(grandSubtotal.toFixed(2)),
+      iva: parseFloat(grandIva.toFixed(2)),
+      ieps: parseFloat(grandIeps.toFixed(2)),
       paymentMethod: document.getElementById('paymentMethod').value,
       invoiceType: document.getElementById('invoiceType').value,
-      status: document.getElementById('paymentStatus').value, // NUEVO
-      notes: document.getElementById('notes').value // NUEVO
+      status: document.getElementById('paymentStatus').value,
+      notes: document.getElementById('notes').value
     };
 
-    const btn = e.target.querySelector('button');
+    const btn = e.target.querySelector('button[type="submit"]');
     btn.textContent = "⏳ Guardando en la nube...";
 
     try {
@@ -313,22 +439,23 @@
         body: JSON.stringify(sale)
       });
 
-      alert("✅ ¡Venta guardada exitosamente en la nube!");
+      alert("✅ ¡Venta guardada exitosamente!");
       
       salesData.push(sale);
       localStorage.setItem('ventas_postreria', JSON.stringify(salesData));
 
+      // Limpiar Formulario y Carrito
       saleForm.reset();
+      currentCart = [];
+      renderCart();
       document.getElementById('saleDate').value = new Date().toISOString().split('T')[0];
       document.getElementById('customer').value = "Público en General";
-      calculateTaxes();
       renderTable();
       
     } catch (error) {
-      alert("❌ Hubo un error al guardar en la nube. Revisa tu conexión.");
-      console.error(error);
+      alert("❌ Hubo un error al guardar. Revisa tu conexión.");
     }
-    btn.textContent = "Guardar Venta";
+    btn.textContent = "Guardar Venta Completa";
   });
 
   function renderTable() {
@@ -340,7 +467,7 @@
       tr.innerHTML = `
         <td>${item.date}</td>
         <td>${item.customer}</td>
-        <td>${item.product} (${item.quantity})</td>
+        <td style="max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${item.product}">${item.product}</td>
         <td>$${item.total.toFixed(2)}</td>
         <td><span class="${statusClass}">${item.status}</span></td>
       `;
@@ -348,10 +475,8 @@
     });
   }
 
-  // BOTÓN LIMPIAR PANTALLA (NUEVO)
   document.getElementById('btnClear').addEventListener('click', () => {
-    const confirmar = confirm("⚠️ ¿Estás seguro que deseas limpiar el historial de la pantalla? (Tranquilo, esto NO borra los datos de tu Google Sheets).");
-    if (confirmar) {
+    if (confirm("⚠️ ¿Limpiar el historial de la pantalla? (NO borra tu Google Sheets).")) {
       salesData = [];
       localStorage.removeItem('ventas_postreria');
       renderTable();
@@ -363,7 +488,7 @@
     
     let csv = 'Folio,Fecha,Cliente,Producto,Clave SAT,Cantidad,Total,Subtotal,IVA,IEPS,Metodo Pago,Tipo Factura,Estatus,Notas\n';
     salesData.forEach(row => {
-      csv += `${row.id},${row.date},"${row.customer}","${row.product}",${row.satCode},${row.quantity},${row.total},${row.subtotal},${row.iva},${row.ieps},"${row.paymentMethod}","${row.invoiceType}","${row.status}","${row.notes}"\n`;
+      csv += `${row.id},${row.date},"${row.customer}","${row.product}","${row.satCode}",${row.quantity},${row.total},${row.subtotal},${row.iva},${row.ieps},"${row.paymentMethod}","${row.invoiceType}","${row.status}","${row.notes}"\n`;
     });
 
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
