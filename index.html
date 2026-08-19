@@ -255,17 +255,21 @@
     return { subtotal, iva, ieps };
   }
 
-  // Guardar Venta
-  saleForm.addEventListener('submit', (e) => {
+  // URL del Web App de Google Apps Script
+  const sheetURL = "https://script.google.com/macros/s/AKfycbzUITMtQ2Faz6jiJ-IjnR-wG2rGYKsldx9AIR1r16dyw-2p54SXU4WD2U-Rw-2ZPcO7eA/exec";
+
+  // Guardar Venta (Nube y Local)
+  saleForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const { subtotal, iva, ieps } = calculateTaxes();
     const selectedOption = productSelect.options[productSelect.selectedIndex];
+    const folioVenta = 'VTA-' + Math.floor(1000 + Math.random() * 9000);
 
     const sale = {
-      id: 'VTA-' + (salesData.length + 1).toString().padStart(3, '0'),
+      id: folioVenta,
       date: document.getElementById('saleDate').value,
-      customer: document.getElementById('customer').value,
-      product: selectedOption.value, // <--- Ajustado para tomar el nombre limpio directamente del value
+      customer: document.getElementById('customer').value, // <-- El cliente se incluyó aquí
+      product: selectedOption.value, // Toma el nombre limpio de la opción
       satCode: selectedOption.dataset.sat,
       quantity: parseInt(quantityInput.value),
       total: parseFloat(totalInput.value),
@@ -276,16 +280,36 @@
       invoiceType: document.getElementById('invoiceType').value
     };
 
-    salesData.push(sale);
-    localStorage.setItem('ventas_postreria', JSON.stringify(salesData));
-    
-    // Resetear formulario y mantener "Público en General" y la fecha de hoy
-    saleForm.reset();
-    document.getElementById('saleDate').value = new Date().toISOString().split('T')[0];
-    document.getElementById('customer').value = "Público en General"; 
-    
-    calculateTaxes();
-    renderTable();
+    const btn = e.target.querySelector('button');
+    btn.textContent = "⏳ Guardando en la nube...";
+
+    try {
+      // Envío a Google Sheets
+      await fetch(sheetURL, {
+        method: 'POST',
+        mode: 'no-cors', 
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(sale)
+      });
+
+      alert("✅ ¡Venta guardada exitosamente en la nube!");
+      
+      // Se guarda de forma local para actualizar la tabla del navegador
+      salesData.push(sale);
+      localStorage.setItem('ventas_postreria', JSON.stringify(salesData));
+
+      // Reseteo del formulario
+      saleForm.reset();
+      document.getElementById('saleDate').value = new Date().toISOString().split('T')[0];
+      document.getElementById('customer').value = "Público en General";
+      calculateTaxes();
+      renderTable();
+      
+    } catch (error) {
+      alert("❌ Hubo un error al guardar en la nube. Revisa tu conexión a internet.");
+      console.error(error);
+    }
+    btn.textContent = "Guardar Venta";
   });
 
   // Renderizar tabla
@@ -305,7 +329,7 @@
     });
   }
 
-  // Exportar a CSV
+  // Exportar a CSV (Backup local)
   document.getElementById('btnExport').addEventListener('click', () => {
     if (salesData.length === 0) return alert('No hay ventas registradas.');
     
