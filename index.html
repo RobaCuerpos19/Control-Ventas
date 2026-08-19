@@ -176,7 +176,7 @@
                 <option value="Hot Cakes Tradicionales (3 pz)" data-sat="50192701" data-iva="0" data-ieps="0" data-price="50">Hot Cakes Tradicionales (3 pz) - $50</option>
                 <option value="Hot Cakes con Plátano (3 pz)" data-sat="50192701" data-iva="0" data-ieps="0" data-price="60">Hot Cakes con Plátano (3 pz) - $60</option>
                 <option value="Empanadas de Queso (3 pz)" data-sat="50192701" data-iva="0" data-ieps="0" data-price="50">Empanadas de Queso (3 pz) - $50</option>
-                <option value="Empanadas Pollo / Carne (3 pz)" data-sat="50192701" data-iva="0" data-ieps="0" data-price="50">Empanadas Pollo / Carne (3 pz) - $50</option>
+                <option value="Empanadas Pollo / Carne (3 pz)" data-sat="50192701" data-iva="0" data-ieps="0" data-price="60">Empanadas Pollo / Carne (3 pz) - $60</option> <!-- AQUÍ ESTÁ LA MODIFICACIÓN DE PRECIO -->
                 <option value="Plátano Frito con Lechera" data-sat="50192701" data-iva="0" data-ieps="8" data-price="50">Plátano Frito con Lechera - $50</option>
                 <option value="Plátano Frito Queso y Crema" data-sat="50192701" data-iva="0" data-ieps="0" data-price="60">Plátano Frito Queso y Crema - $60</option>
               </optgroup>
@@ -284,7 +284,7 @@
 <script>
   document.getElementById('saleDate').value = new Date().toISOString().split('T')[0];
   let salesData = JSON.parse(localStorage.getItem('ventas_postreria')) || [];
-  let currentCart = []; // Aquí guardaremos los productos múltiples
+  let currentCart = []; 
 
   const productSelect = document.getElementById('product');
   const quantityInput = document.getElementById('quantity');
@@ -313,7 +313,6 @@
     const ivaRate = (parseFloat(option.dataset.iva) || 0) / 100;
     const iepsRate = (parseFloat(option.dataset.ieps) || 0) / 100;
     
-    // Calcular desglose de ese producto en específico
     const lineTotal = price * qty;
     const lineSubtotal = lineTotal / (1 + ivaRate + iepsRate);
     const lineIva = lineSubtotal * ivaRate;
@@ -330,7 +329,6 @@
       ieps: lineIeps
     });
 
-    // Limpiar inputs
     productSelect.value = "";
     quantityInput.value = 1;
     itemPriceInput.value = "";
@@ -386,7 +384,7 @@
 
   const sheetURL = "https://script.google.com/macros/s/AKfycbzUITMtQ2Faz6jiJ-IjnR-wG2rGYKsldx9AIR1r16dyw-2p54SXU4WD2U-Rw-2ZPcO7eA/exec";
 
-  // Guardar Venta (Combina los productos del carrito)
+  // Guardar Venta
   saleForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     if(currentCart.length === 0) {
@@ -394,7 +392,6 @@
       return;
     }
 
-    // Unir textos para que Google Sheets lo reciba en UNA SOLA fila
     let grandTotal = 0, grandSubtotal = 0, grandIva = 0, grandIeps = 0, totalQty = 0;
     const productNames = [];
     const satCodes = [];
@@ -405,7 +402,7 @@
       grandIva += item.iva;
       grandIeps += item.ieps;
       totalQty += item.qty;
-      productNames.push(`${item.qty}x ${item.name}`); // Ej: "1x Empanadas"
+      productNames.push(`${item.qty}x ${item.name}`); 
       if (!satCodes.includes(item.sat)) satCodes.push(item.sat);
     });
 
@@ -415,7 +412,7 @@
       id: folioVenta,
       date: document.getElementById('saleDate').value,
       customer: document.getElementById('customer').value,
-      product: productNames.join(" + "), // Ej: "1x Empanadas + 1x Pan de Zanahoria"
+      product: productNames.join(" + "), 
       satCode: satCodes.join(", "),
       quantity: totalQty,
       total: parseFloat(grandTotal.toFixed(2)),
@@ -444,7 +441,6 @@
       salesData.push(sale);
       localStorage.setItem('ventas_postreria', JSON.stringify(salesData));
 
-      // Limpiar Formulario y Carrito
       saleForm.reset();
       currentCart = [];
       renderCart();
