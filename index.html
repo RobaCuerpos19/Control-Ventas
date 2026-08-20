@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ameli's Postrery | El sabor de casa</title>
+  <style>
+    /* VARIABLES DE COLORES (Tu Paleta) */
+    :root {
+      --crema: #FDF8F5;
+      --terracota: #C05640;
+      --terracota-hover: #A04530;
+      --cafe: #5C3D2E;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, sans-serif;
+      background-color: var(--crema);
+      color: var(--cafe);
+    }
+
+    /* 1. SECCIÓN DE BIENVENIDA (HERO) */
+    .hero {
+      text-align: center;
+      padding: 5rem 1rem;
+      background-color: var(--crema);
+    }
+    
+    /* Estilos temporales para el nombre en lo que pones la imagen de tu logo */
+    .logo-text {
+      font-family: 'Georgia', serif; 
+      color: var(--terracota);
+      font-size: 4rem;
+      margin: 0;
+      font-style: italic;
+    }
+    .logo-sub {
+      font-weight: 400;
+      font-size: 1.2rem;
+      letter-spacing: 4px;
+      margin-top: 0;
+      color: var(--cafe);
+    }
+
+    .hero-slogan {
+      margin-top: 1.5rem;
+      font-size: 1.1rem;
+      margin-bottom: 2rem;
+    }
+
+    /* 2. LA CUADRÍCULA DEL MENÚ (GRID) */
+    .menu-container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+    }
+    
+    .menu-title {
+      text-align: center;
+      font-size: 2rem;
+      color: var(--terracota);
+      margin-bottom: 2.5rem;
+    }
+
+    .grid {
+      display: grid;
+      /* Aquí ocurre la magia: Se adapta a celular (1 columna) o a PC (3 columnas) */
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+    }
+
+    /* 3. LAS TARJETAS DE LOS POSTRES */
+    .card {
+      background: #ffffff;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(92, 61, 46, 0.08); /* Sombrita elegante café */
+      transition: transform 0.3s ease;
+    }
+    
+    .card:hover {
+      transform: translateY(-5px);
+    }
+
+    .card-img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      background-color: #eaddd7; /* Color temporal de fondo */
+    }
+
+    .card-body {
+      padding: 1.5rem;
+      text-align: center;
+    }
+
+    .card-title {
+      font-size: 1.4rem;
+      color: var(--terracota);
+      margin: 0 0 0.5rem 0;
+    }
+
+    .card-price {
+      font-weight: bold;
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+    }
+
+    .card-desc {
+      font-size: 0.95rem;
+      line-height: 1.5;
+      margin-bottom: 1.5rem;
+      color: #7a5a4a;
+    }
+
+    /* 4. BOTONES */
+    .btn-wa {
+      display: inline-block;
+      background-color: var(--terracota);
+      color: var(--crema);
+      text-decoration: none;
+      padding: 0.8rem 1.5rem;
+      border-radius: 25px;
+      font-weight: bold;
+      transition: background 0.3s;
+    }
+    
+    .btn-wa:hover {
+      background-color: var(--terracota-hover);
+    }
+
+    /* 5. PIE DE PÁGININA */
+    footer {
+      text-align: center;
+      padding: 2rem;
+      background-color: var(--cafe);
+      color: var(--crema);
+      margin-top: 4rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========================================== -->
+  <!-- SECCIÓN DE BIENVENIDA                      -->
+  <!-- ========================================== -->
+  <section class="hero">
+    <!-- Aquí luego cambiaremos estas letras por la imagen de tu logo final -->
+    <h1 class="logo-text">Ameli's</h1>
+    <h2 class="logo-sub">POSTRERY</h2>
+    
+    <p class="hero-slogan">El sabor de casa, directo a tu mesa.</p>
+    <a href="#menu" class="btn-wa" style="background-color: var(--cafe);">Ver el Menú</a>
+  </section>
+
+  <!-- ========================================== -->
+  <!-- SECCIÓN DE MENÚ (GRID)                     -->
+  <!-- ========================================== -->
+  <section id="menu" class="menu-container">
+    <h2 class="menu-title">Nuestros Clásicos</h2>
+    
+    <div class="grid">
+      
+      <!-- TARJETA 1: GALLETAS -->
+      <div class="card">
+        <!-- Reemplaza el enlace 'src' por el link de tu foto real -->
+        <img src="https://via.placeholder.com/400x300/eaddd7/5C3D2E?text=Foto+Galletas" alt="Galletas con Chispas" class="card-img">
+        <div class="card-body">
+          <h3 class="card-title">Galletas con Chispas</h3>
+          <div class="card-price">$35.00 <small>(5 pz)</small></div>
+          <p class="card-desc">Crujientes por fuera, suaves por dentro y repletas de chispas de chocolate. El antojo perfecto para acompañar tu café.</p>
+          <!-- El enlace ya tiene tu número preconfigurado para abrir WhatsApp -->
+          <a href="https://wa.me/529988414933?text=Hola,%20quisiera%20pedir%20unas%20Galletas%20con%20Chispas" target="_blank" class="btn-wa">Pedir por WhatsApp</a>
+        </div>
+      </div>
+
+      <!-- TARJETA 2: FLAN -->
+      <div class="card">
+        <img src="https://via.placeholder.com/400x300/eaddd7/5C3D2E?text=Foto+Flan" alt="Flan de Cajeta" class="card-img">
+        <div class="card-body">
+          <h3 class="card-title">Flan de Cajeta</h3>
+          <div class="card-price">$35.00 <small>(Rebanada)</small></div>
+          <p class="card-desc">Nuestra receta tradicional y cremosa, cubierta con una generosa capa de auténtica cajeta. Un abrazo al corazón en cada bocado.</p>
+          <a href="https://wa.me/529988414933?text=Hola,%20quisiera%20pedir%20una%20rebanada%20de%20Flan%20de%20Cajeta" target="_blank" class="btn-wa">Pedir por WhatsApp</a>
+        </div>
+      </div>
+
+      <!-- TARJETA 3: PAN DE ZANAHORIA -->
+      <div class="card">
+        <img src="https://via.placeholder.com/400x300/eaddd7/5C3D2E?text=Foto+Pan+Zanahoria" alt="Pan de Zanahoria" class="card-img">
+        <div class="card-body">
+          <h3 class="card-title">Pan de Zanahoria</h3>
+          <div class="card-price">$30.00 <small>(Rebanada)</small></div>
+          <p class="card-desc">Esponjoso, extra húmedo y con toques de canela y nuez. El clásico de la casa que nunca falla en tus tardes dulces.</p>
+          <a href="https://wa.me/529988414933?text=Hola,%20quisiera%20pedir%20una%20rebanada%20de%20Pan%20de%20Zanahoria" target="_blank" class="btn-wa">Pedir por WhatsApp</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================== -->
+  <!-- PIE DE PÁGINA (FOOTER)                     -->
+  <!-- ========================================== -->
+  <footer>
+    <p><strong>Ameli's Postrery</strong> | Hecho con amor en Cancún, Q.R.</p>
+    <p style="font-size: 0.8rem; opacity: 0.8; margin-top: 10px;">Negocio operando formalmente bajo el régimen RESICO.</p>
+  </footer>
+
+</body>
+</html>
