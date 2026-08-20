@@ -73,6 +73,7 @@
   <div class="tabs-nav">
     <button id="btnTabVentas" class="tab-btn active-venta" onclick="openTab('ventas')">🛒 Ventas</button>
     <button id="btnTabGastos" class="tab-btn" onclick="openTab('gastos')">🧾 Gastos / Compras</button>
+    <button onclick="abrirPestana('Cobranza')">💰 Cobranza</button>
   </div>
 
   <!-- PESTAÑA 1: VENTAS -->
@@ -251,7 +252,24 @@
   }
 
   const sheetURL = "https://script.google.com/macros/s/AKfycbzUITMtQ2Faz6jiJ-IjnR-wG2rGYKsldx9AIR1r16dyw-2p54SXU4WD2U-Rw-2ZPcO7eA/exec";
-
+  
+  <div id="Cobranza" class="tab-content" style="display:none; padding: 20px;">
+  <h2 style="color: #C05640;">Gestión de Cobranza</h2>
+  <button onclick="cargarDeudores()" style="margin-bottom: 15px; padding: 10px; background: #5C3D2E; color: white;">🔄 Actualizar Lista</button>
+  
+  <table border="1" width="100%" style="border-collapse: collapse; text-align: center;">
+    <thead style="background: #FDF8F5; color: #5C3D2E;">
+      <tr>
+        <th>Cliente</th>
+        <th>Monto Pendiente</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody id="listaDeudores">
+      <!-- Los clientes se inyectarán aquí -->
+    </tbody>
+  </table>
+</div>
   // ==========================================
   // LÓGICA DE VENTAS
   // ==========================================
