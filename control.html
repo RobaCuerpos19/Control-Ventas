@@ -461,38 +461,46 @@
   function exportCSV(tipo) { }
   renderTables();
 
-  // ==========================================
+ // ==========================================
   // LÓGICA DE COBRANZA Y RECIBOS
   // ==========================================
   function cargarDeudores() {
-    // Simulador temporal
-    const ventas = [
-      { cliente: "Juanpa", monto: 150, estado: "Pendiente", telefono: "529980000000" },
-      { cliente: "Sofia", monto: 80, estado: "Pagado", telefono: "529980000001" },
-      { cliente: "Carlos", monto: 210, estado: "Pendiente", telefono: "529980000002" }
-    ];
+    // 1. Leemos tus ventas reales de la memoria local
+    const ventasReales = JSON.parse(localStorage.getItem('ventas_postreria')) || [];
     
     const tbody = document.getElementById("listaDeudores");
     tbody.innerHTML = ""; 
     
-    ventas.forEach(venta => {
-      if(venta.estado === "Pendiente") {
+    let deudoresEncontrados = 0;
+
+    // 2. Revisamos cada venta real buscando las "Pendientes"
+    ventasReales.forEach(venta => {
+      if(venta.status === "Pendiente") {
+        deudoresEncontrados++;
+        
         tbody.innerHTML += `
           <tr style="border-bottom: 1px solid #cbd5e1;">
-            <td style="padding: 12px; font-weight: bold; color: #1e293b;">${venta.cliente}</td>
-            <td style="color: #059669; font-weight: bold;">$${venta.monto.toFixed(2)}</td>
+            <td style="padding: 12px; font-weight: bold; color: #1e293b;">${venta.customer}</td>
+            <td style="color: #059669; font-weight: bold;">$${venta.total.toFixed(2)}</td>
             <td style="display: flex; justify-content: center; gap: 8px;">
-              <button onclick="cobrarWhatsApp('${venta.telefono}', '${venta.monto}')" style="background: #25d366; color: white; padding: 6px 12px; border-radius: 20px; border: none; cursor: pointer; font-weight: bold;">🔔 WhatsApp</button>
+              <button onclick="cobrarWhatsApp('${venta.total}')" style="background: #25d366; color: white; padding: 6px 12px; border-radius: 20px; border: none; cursor: pointer; font-weight: bold;">🔔 WhatsApp</button>
               <button onclick="generarNotaQR()" style="background: #C05640; color: white; padding: 6px 12px; border-radius: 20px; border: none; cursor: pointer; font-weight: bold;">🧾 PDF + QR</button>
             </td>
           </tr>`;
       }
     });
+
+    // 3. Un mensaje bonito si nadie te debe dinero
+    if(deudoresEncontrados === 0) {
+      tbody.innerHTML = `<tr><td colspan="3" style="padding: 20px; color: #64748b;">¡Felicidades! No tienes cobros pendientes. 🎉</td></tr>`;
+    }
   }
 
-  function cobrarWhatsApp(telefono, monto) {
+  // La función va fuera, independiente de la tabla
+  function cobrarWhatsApp(monto) {
     const mensaje = `¡Hola! Esperamos que hayas disfrutado mucho tus postres de Ameli's Postrery. 🍪 Te escribimos para compartirte los datos de transferencia de tu pedido pendiente por $${monto}.%0A%0ABeneficiario: Kevin Saul Ramirez Sosa%0ABanco: Nubank%0ACLABE: 638180010133817963%0A%0A¡Muchísimas gracias por tu preferencia!`;
-    window.open(`https://wa.me/${telefono}?text=${mensaje}`, '_blank');
+    
+    window.open(`https://wa.me/?text=${mensaje}`, '_blank');
   }
 
   function generarNotaQR() {
