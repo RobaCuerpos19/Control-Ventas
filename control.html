@@ -26,6 +26,7 @@
     .tab-btn { flex: 1; padding: 0.75rem; border: none; border-radius: 8px; font-size: 1rem; font-weight: bold; cursor: pointer; background: transparent; color: #64748b; transition: 0.3s; }
     .tab-btn.active-venta { background: var(--primary); color: white; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
     .tab-btn.active-gasto { background: var(--expense); color: white; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    .tab-btn.active-cobranza { background: #059669; color: white; box-shadow: 0 2px 4px rgba(0,0,0,0.1); } /* Verde para dinero */
     .tab-content { display: none; }
     .tab-content.active { display: block; }
 
@@ -73,12 +74,12 @@
   <div class="tabs-nav">
     <button id="btnTabVentas" class="tab-btn active-venta" onclick="openTab('ventas')">🛒 Ventas</button>
     <button id="btnTabGastos" class="tab-btn" onclick="openTab('gastos')">🧾 Gastos / Compras</button>
-    <button onclick="abrirPestana('Cobranza')">💰 Cobranza</button>
+    <!-- Botón actualizado para las 3 pestañas -->
+    <button id="btnTabCobranza" class="tab-btn" onclick="openTab('cobranza')">💰 Cobranza</button>
   </div>
 
   <!-- PESTAÑA 1: VENTAS -->
   <div id="tabVentas" class="tab-content active">
-    <!-- El formulario de ventas se mantiene igual que antes -->
     <div class="card">
       <h2 style="color: var(--primary);">➕ Nueva Venta</h2>
       <form id="saleForm">
@@ -165,7 +166,6 @@
           </div>
         </div>
 
-        <!-- CARRITO DE GASTOS -->
         <div class="product-entry-box" style="border-color: #fecdd3; background: #fff1f2;">
           <h3 style="font-size: 1rem; margin-bottom: 0.75rem; color: var(--expense);">🛒 Añadir Artículo al Ticket</h3>
           <div class="grid-2">
@@ -201,7 +201,6 @@
           <button type="button" id="btnAddExpense" class="btn btn-expense" style="padding: 0.5rem;">➕ Añadir a la lista</button>
         </div>
 
-        <!-- RESUMEN TICKET -->
         <div id="expenseBox" class="cart-box" style="display: none; border-color: var(--expense);">
           <h4 style="margin-bottom: 0.5rem; font-size: 0.95rem; color: var(--expense);">🧾 Artículos en el ticket:</h4>
           <div id="expenseItems"></div>
@@ -231,45 +230,59 @@
     </div>
   </div>
 
+  <!-- PESTAÑA 3: COBRANZA (Ya está afuera del script y bien colocada) -->
+  <div id="tabCobranza" class="tab-content">
+    <div class="card" style="border-top: 4px solid #059669;">
+      <h2 style="color: #059669;">💰 Gestión de Cobranza</h2>
+      <button onclick="cargarDeudores()" class="btn-secondary" style="margin-bottom: 15px; width: auto;">🔄 Actualizar Lista</button>
+      
+      <div class="table-container">
+        <table style="width: 100%; border-collapse: collapse; text-align: center;">
+          <thead style="background: #f8fafc;">
+            <tr>
+              <th>Cliente</th>
+              <th>Monto Pendiente</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="listaDeudores">
+            <!-- Los clientes se inyectarán aquí -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
 </div>
 
 <script>
   // ==========================================
-  // PESTAÑAS
+  // PESTAÑAS (ACTUALIZADO PARA LAS 3)
   // ==========================================
   function openTab(tabName) {
     document.getElementById('tabVentas').classList.remove('active');
     document.getElementById('tabGastos').classList.remove('active');
+    document.getElementById('tabCobranza').classList.remove('active');
+    
     document.getElementById('btnTabVentas').className = 'tab-btn';
     document.getElementById('btnTabGastos').className = 'tab-btn';
+    document.getElementById('btnTabCobranza').className = 'tab-btn';
+    
     if(tabName === 'ventas') {
       document.getElementById('tabVentas').classList.add('active');
       document.getElementById('btnTabVentas').classList.add('active-venta');
-    } else {
+    } else if(tabName === 'gastos') {
       document.getElementById('tabGastos').classList.add('active');
       document.getElementById('btnTabGastos').classList.add('active-gasto');
+    } else if(tabName === 'cobranza') {
+      document.getElementById('tabCobranza').classList.add('active');
+      document.getElementById('btnTabCobranza').classList.add('active-cobranza');
+      cargarDeudores(); // Carga la lista automáticamente al abrir la pestaña
     }
   }
 
   const sheetURL = "https://script.google.com/macros/s/AKfycbzUITMtQ2Faz6jiJ-IjnR-wG2rGYKsldx9AIR1r16dyw-2p54SXU4WD2U-Rw-2ZPcO7eA/exec";
   
-  <div id="Cobranza" class="tab-content" style="display:none; padding: 20px;">
-  <h2 style="color: #C05640;">Gestión de Cobranza</h2>
-  <button onclick="cargarDeudores()" style="margin-bottom: 15px; padding: 10px; background: #5C3D2E; color: white;">🔄 Actualizar Lista</button>
-  
-  <table border="1" width="100%" style="border-collapse: collapse; text-align: center;">
-    <thead style="background: #FDF8F5; color: #5C3D2E;">
-      <tr>
-        <th>Cliente</th>
-        <th>Monto Pendiente</th>
-        <th>Acciones</th>
-      </tr>
-    </thead>
-    <tbody id="listaDeudores">
-      <!-- Los clientes se inyectarán aquí -->
-    </tbody>
-  </table>
-</div>
   // ==========================================
   // LÓGICA DE VENTAS
   // ==========================================
@@ -364,7 +377,6 @@
     if(!concept) return alert("Escribe qué compraste (Concepto).");
     
     const qty = parseFloat(document.getElementById('expQty').value) || 1;
-    // MODIFICADO: Ahora el valor ingresado es el Total de ese artículo. Ya no se multiplica.
     const lineTotal = parseFloat(document.getElementById('expItemCost').value) || 0;
     
     const category = document.getElementById('expCategory').value;
@@ -448,40 +460,44 @@
   }
   function exportCSV(tipo) { }
   renderTables();
-function cargarDeudores() {
-  // Simulador temporal (aquí conectaremos tu base real de ventas locales)
-  const ventas = [
-    { cliente: "Juanpa", monto: 150, estado: "Pendiente", telefono: "529980000000" },
-    { cliente: "Sofia", monto: 80, estado: "Pagado", telefono: "529980000001" },
-    { cliente: "Carlos", monto: 210, estado: "Pendiente", telefono: "529980000002" }
-  ];
-  
-  const tbody = document.getElementById("listaDeudores");
-  tbody.innerHTML = ""; 
-  
-  ventas.forEach(venta => {
-    if(venta.estado === "Pendiente") {
-      tbody.innerHTML += `
-        <tr>
-          <td style="padding: 10px;">${venta.cliente}</td>
-          <td>$${venta.monto}</td>
-          <td>
-            <button onclick="cobrarWhatsApp('${venta.telefono}', '${venta.monto}')" style="background: #25d366; color: white; padding: 5px 10px; border-radius: 15px; border: none;">🔔 Enviar WhatsApp</button>
-            <button onclick="generarNotaQR()" style="background: #C05640; color: white; padding: 5px 10px; border-radius: 15px; border: none;">🧾 Crear PDF</button>
-          </td>
-        </tr>`;
-    }
-  });
-}
 
-function cobrarWhatsApp(telefono, monto) {
-  const mensaje = `¡Hola! Esperamos que hayas disfrutado mucho tus postres de Ameli's Postrery. 🍪 Te escribimos para compartirte los datos de transferencia de tu pedido pendiente por $${monto}.%0A%0ABeneficiario: Kevin Saul Ramirez Sosa%0ABanco: Nubank%0ACLABE: 638180010133817963%0A%0A¡Muchísimas gracias por tu preferencia!`;
-  window.open(`https://wa.me/${telefono}?text=${mensaje}`, '_blank');
-}
+  // ==========================================
+  // LÓGICA DE COBRANZA Y RECIBOS
+  // ==========================================
+  function cargarDeudores() {
+    // Simulador temporal
+    const ventas = [
+      { cliente: "Juanpa", monto: 150, estado: "Pendiente", telefono: "529980000000" },
+      { cliente: "Sofia", monto: 80, estado: "Pagado", telefono: "529980000001" },
+      { cliente: "Carlos", monto: 210, estado: "Pendiente", telefono: "529980000002" }
+    ];
+    
+    const tbody = document.getElementById("listaDeudores");
+    tbody.innerHTML = ""; 
+    
+    ventas.forEach(venta => {
+      if(venta.estado === "Pendiente") {
+        tbody.innerHTML += `
+          <tr style="border-bottom: 1px solid #cbd5e1;">
+            <td style="padding: 12px; font-weight: bold; color: #1e293b;">${venta.cliente}</td>
+            <td style="color: #059669; font-weight: bold;">$${venta.monto.toFixed(2)}</td>
+            <td style="display: flex; justify-content: center; gap: 8px;">
+              <button onclick="cobrarWhatsApp('${venta.telefono}', '${venta.monto}')" style="background: #25d366; color: white; padding: 6px 12px; border-radius: 20px; border: none; cursor: pointer; font-weight: bold;">🔔 WhatsApp</button>
+              <button onclick="generarNotaQR()" style="background: #C05640; color: white; padding: 6px 12px; border-radius: 20px; border: none; cursor: pointer; font-weight: bold;">🧾 PDF + QR</button>
+            </td>
+          </tr>`;
+      }
+    });
+  }
 
-function generarNotaQR() {
-  alert("Esta función conectará con tu generador de PDF y códigos QR en nuestra siguiente sesión.");
-}
+  function cobrarWhatsApp(telefono, monto) {
+    const mensaje = `¡Hola! Esperamos que hayas disfrutado mucho tus postres de Ameli's Postrery. 🍪 Te escribimos para compartirte los datos de transferencia de tu pedido pendiente por $${monto}.%0A%0ABeneficiario: Kevin Saul Ramirez Sosa%0ABanco: Nubank%0ACLABE: 638180010133817963%0A%0A¡Muchísimas gracias por tu preferencia!`;
+    window.open(`https://wa.me/${telefono}?text=${mensaje}`, '_blank');
+  }
+
+  function generarNotaQR() {
+    alert("Esta función conectará con tu generador de PDF y códigos QR en nuestra siguiente sesión.");
+  }
 </script>
 </body>
 </html>
