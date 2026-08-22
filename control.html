@@ -480,14 +480,16 @@
     const reader = new FileReader();
     
     reader.onload = async function(event) {
-      // Extraemos la información en base64 de la imagen
-      const base64Data = event.target.result.split(',')[1];
+// ESTA ES LA LÍNEA CLAVE QUE DEBEMOS CAMBIAR
+      // Nos aseguramos de separar por la coma y quedarnos SÓLO con la parte de los datos
+      const base64String = event.target.result;
+      const base64Data = base64String.includes(',') ? base64String.split(',')[1] : base64String;
       
       const payload = {
         type: 'foto_recibo',
         fileName: file.name,
         mimeType: file.type,
-        data: base64Data,
+        data: base64Data, // Mandamos la imagen limpia
         date: document.getElementById('ticketDate').value,
         amount: document.getElementById('ticketAmount').value,
         concept: document.getElementById('ticketConcept').value
@@ -510,7 +512,7 @@
       btn.textContent = "Subir a Google Drive";
     };
     
-    reader.readAsDataURL(file); // Inicia la conversión de la imagen
+    reader.readAsDataURL(file); 
   });
 
 </script>
