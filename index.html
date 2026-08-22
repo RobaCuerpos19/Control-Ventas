@@ -27,6 +27,16 @@
     .card-price { font-weight: bold; font-size: 1.1rem; margin-bottom: 1rem; }
     .card-desc { font-size: 0.95rem; margin-bottom: 1.5rem; color: #7a5a4a; }
 
+    /* FILTROS DEL MENÚ ARTESANAL */
+    .filtros { display: flex; justify-content: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 3rem; }
+    .btn-filtro { background-color: transparent; border: 2px solid var(--terracota); color: var(--terracota); padding: 0.6rem 1.5rem; border-radius: 30px; font-size: 0.95rem; font-weight: bold; cursor: pointer; transition: all 0.3s ease; }
+    .btn-filtro:hover, .btn-filtro.activo { background-color: var(--terracota); color: var(--crema); }
+    .oculto { display: none !important; }
+    .card-content { padding: 1.5rem; display: flex; flex-direction: column; flex-grow: 1; text-align: center; }
+    .card-prices { margin-bottom: 1.5rem; border-top: 1px solid rgba(192, 86, 64, 0.2); padding-top: 0.8rem; }
+    .price-row { display: flex; justify-content: space-between; gap: 1rem; font-size: 0.95rem; margin-bottom: 0.3rem; }
+    .price-row strong { color: var(--terracota); font-size: 1.1rem; white-space: nowrap; }
+
     /* BOTONES */
     .btn { display: inline-block; background: var(--terracota); color: var(--crema); text-decoration: none; padding: 0.8rem 1.5rem; border-radius: 25px; font-weight: bold; transition: 0.3s; }
     .btn:hover { background: var(--terracota-hover); }
@@ -58,36 +68,84 @@
 
   <!-- MENU -->
   <main class="container">
-    <h2 class="section-title">Nuestros Clásicos</h2>
-    
-    <div class="grid">
-      <div class="card">
+    <h2 class="section-title">Menú Artesanal</h2>
+    <div class="filtros">
+      <button class="btn-filtro activo" onclick="filtrarMenu('todos', this)">Todos</button>
+      <button class="btn-filtro" onclick="filtrarMenu('postres', this)">Postres y Flanes</button>
+      <button class="btn-filtro" onclick="filtrarMenu('panaderia', this)">Panadería y Galletas</button>
+      <button class="btn-filtro" onclick="filtrarMenu('antojitos', this)">Desayunos y Antojitos</button>
+    </div>
+    <div class="grid" id="menuGrid">
+      <div class="card item-menu panaderia">
         <img src="galletas.jpg" alt="Galletas con Chispas" class="card-img">
-        <div class="card-body">
+        <div class="card-content">
           <h3 class="card-title">Galletas con Chispas</h3>
-          <div class="card-price">$35.00 <small>(5 pz)</small></div>
-          <p class="card-desc">Crujientes por fuera, suaves por dentro y repletas de chispas de chocolate. El antojo perfecto.</p>
-          <a href="https://wa.me/529988414933?text=Hola,%20quisiera%20pedir%20unas%20Galletas%20con%20Chispas" target="_blank" class="btn">Pedir ahora</a>
+          <p class="card-desc">Crujientes, deliciosas y hechas con la receta clásica de la casa. El antojo perfecto.</p>
+          <div class="card-prices"><div class="price-row"><span>Paquete (5 pz)</span><strong>$35.00</strong></div></div>
+          <a href="https://wa.me/529988414933?text=Hola,%20quisiera%20pedir%20un%20paquete%20de%20Galletas%20con%20chispas" target="_blank" class="btn">Pedir ahora</a>
         </div>
       </div>
-
-      <div class="card">
+      <div class="card item-menu postres">
         <img src="flan.jpg" alt="Flan de Cajeta" class="card-img">
-        <div class="card-body">
+        <div class="card-content">
           <h3 class="card-title">Flan de Cajeta</h3>
-          <div class="card-price">$35.00 <small>(Rebanada)</small></div>
           <p class="card-desc">Nuestra receta tradicional y cremosa, cubierta con una generosa capa de auténtica cajeta.</p>
-          <a href="https://wa.me/529988414933?text=Hola,%20quisiera%20pedir%20una%20rebanada%20de%20Flan%20de%20Cajeta" target="_blank" class="btn">Pedir ahora</a>
+          <div class="card-prices"><div class="price-row"><span>Rebanada</span><strong>$35.00</strong></div></div>
+          <a href="https://wa.me/529988414933?text=Hola,%20quisiera%20pedir%20Flan%20de%20Cajeta" target="_blank" class="btn">Pedir ahora</a>
         </div>
       </div>
-
-      <div class="card">
+      <div class="card item-menu panaderia">
+        <img src="https://via.placeholder.com/400x300/FDF8F5/C05640?text=Pan+de+Elote" alt="Pan de Elote" class="card-img">
+        <div class="card-content">
+          <h3 class="card-title">Pan de Elote</h3>
+          <p class="card-desc">Sabor auténtico y textura suave, hecho con granos de elote natural.</p>
+          <div class="card-prices"><div class="price-row"><span>Rebanada</span><strong>$20.00</strong></div></div>
+          <a href="https://wa.me/529988414933?text=Hola,%20quisiera%20pedir%20Pan%20de%20Elote" target="_blank" class="btn">Pedir ahora</a>
+        </div>
+      </div>
+      <div class="card item-menu panaderia">
         <img src="zanahoria.jpg" alt="Pan de Zanahoria" class="card-img">
-        <div class="card-body">
+        <div class="card-content">
           <h3 class="card-title">Pan de Zanahoria</h3>
-          <div class="card-price">$30.00 <small>(Rebanada)</small></div>
-          <p class="card-desc">Esponjoso, extra húmedo y con toques de canela y nuez. El clásico de la casa que nunca falla.</p>
-          <a href="https://wa.me/529988414933?text=Hola,%20quisiera%20pedir%20una%20rebanada%20de%20Pan%20de%20Zanahoria" target="_blank" class="btn">Pedir ahora</a>
+          <p class="card-desc">Esponjoso, extra húmedo y con toques de canela y nuez. El clásico que nunca falla.</p>
+          <div class="card-prices"><div class="price-row"><span>Rebanada</span><strong>$30.00</strong></div></div>
+          <a href="https://wa.me/529988414933?text=Hola,%20quisiera%20pedir%20Pan%20de%20Zanahoria" target="_blank" class="btn">Pedir ahora</a>
+        </div>
+      </div>
+      <div class="card item-menu postres">
+        <img src="https://via.placeholder.com/400x300/FDF8F5/C05640?text=Pay+de+Queso" alt="Pay de Queso Fresa" class="card-img">
+        <div class="card-content">
+          <h3 class="card-title">Pay de Queso Fresa</h3>
+          <p class="card-desc">Suave relleno de queso sobre una base crujiente, coronado con dulce mermelada.</p>
+          <div class="card-prices"><div class="price-row"><span>Rebanada</span><strong>$35.00</strong></div></div>
+          <a href="https://wa.me/529988414933?text=Hola,%20quisiera%20pedir%20Pay%20de%20Queso" target="_blank" class="btn">Pedir ahora</a>
+        </div>
+      </div>
+      <div class="card item-menu antojitos">
+        <img src="https://via.placeholder.com/400x300/FDF8F5/C05640?text=Hot+Cakes" alt="Hot Cakes Esponjosos" class="card-img">
+        <div class="card-content">
+          <h3 class="card-title">Hot Cakes Esponjosos</h3>
+          <p class="card-desc">Perfectos para iniciar tu día. Suaves, doraditos y listos para disfrutar.</p>
+          <div class="card-prices"><div class="price-row"><span>Tradicionales (3 pz)</span><strong>$50.00</strong></div></div>
+          <a href="https://wa.me/529988414933?text=Hola,%20quisiera%20pedir%20una%20orden%20de%20Hot%20Cakes" target="_blank" class="btn">Pedir ahora</a>
+        </div>
+      </div>
+      <div class="card item-menu antojitos">
+        <img src="https://via.placeholder.com/400x300/FDF8F5/C05640?text=Empanadas" alt="Empanadas Caseras" class="card-img">
+        <div class="card-content">
+          <h3 class="card-title">Empanadas Caseras</h3>
+          <p class="card-desc">Masa crujiente con rellenos abundantes y deliciosos. El antojo salado perfecto.</p>
+          <div class="card-prices"><div class="price-row"><span>De Queso (3 pz)</span><strong>$50.00</strong></div></div>
+          <a href="https://wa.me/529988414933?text=Hola,%20quisiera%20pedir%20una%20orden%20de%20Empanadas" target="_blank" class="btn">Pedir ahora</a>
+        </div>
+      </div>
+      <div class="card item-menu antojitos">
+        <img src="https://via.placeholder.com/400x300/FDF8F5/C05640?text=Platano+Frito" alt="Plátanos Fritos" class="card-img">
+        <div class="card-content">
+          <h3 class="card-title">Plátanos Fritos</h3>
+          <p class="card-desc">Doraditos por fuera y suaves por dentro. Un clásico irresistible.</p>
+          <div class="card-prices"><div class="price-row"><span>Con Lechera</span><strong>$50.00</strong></div></div>
+          <a href="https://wa.me/529988414933?text=Hola,%20quisiera%20pedir%20Plátanos%20Fritos" target="_blank" class="btn">Pedir ahora</a>
         </div>
       </div>
     </div>
@@ -126,6 +184,16 @@
   <a href="https://wa.me/529988414933?text=Hola!%20Vengo%20de%20la%20página%20web%20y%20tengo%20una%20duda%20sobre%20un%20pedido." target="_blank" class="float-wa">
     💬 Escríbenos
   </a>
+
+  <script>
+    function filtrarMenu(categoria, boton) {
+      document.querySelectorAll('.btn-filtro').forEach(btn => btn.classList.remove('activo'));
+      boton.classList.add('activo');
+      document.querySelectorAll('.item-menu').forEach(tarjeta => {
+        tarjeta.classList.toggle('oculto', categoria !== 'todos' && !tarjeta.classList.contains(categoria));
+      });
+    }
+  </script>
 
 </body>
 </html>
